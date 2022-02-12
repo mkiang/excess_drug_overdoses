@@ -1,0 +1,61 @@
+region,region_name,race_cat,educ_cat,death_cat,fitted,se,upper,lower
+1,Superior California,Total,All levels,Alcohol,-20.127155984021044,13.092079286451021,5.533319417422955,-45.78763138546505
+2,North Coast,Total,All levels,Alcohol,NA,NA,NA,NA
+3,San Francisco Bay Area,Total,All levels,Alcohol,90.69086070261487,16.09276381034507,122.2326777708912,59.14904363433854
+4,Northern San Joaquin Valley,Total,All levels,Alcohol,NA,NA,NA,NA
+5,Central Coast,Total,All levels,Alcohol,NA,NA,NA,NA
+6,Southern San Joaquin Valley,Total,All levels,Alcohol,NA,NA,NA,NA
+7,Inland Empire,Total,All levels,Alcohol,NA,NA,NA,NA
+8,Los Angeles County,Total,All levels,Alcohol,64.05597511287496,15.115466139387,93.68228874607348,34.42966147967644
+9,Orange County,Total,All levels,Alcohol,NA,NA,NA,NA
+10,San Diego - Impreial,Total,All levels,Alcohol,69.57207869223231,10.142229773138762,89.45084904758428,49.693308336880335
+1,Superior California,Total,All levels,Benzodiazepine,NA,NA,NA,NA
+2,North Coast,Total,All levels,Benzodiazepine,NA,NA,NA,NA
+3,San Francisco Bay Area,Total,All levels,Benzodiazepine,NA,NA,NA,NA
+4,Northern San Joaquin Valley,Total,All levels,Benzodiazepine,NA,NA,NA,NA
+5,Central Coast,Total,All levels,Benzodiazepine,NA,NA,NA,NA
+6,Southern San Joaquin Valley,Total,All levels,Benzodiazepine,NA,NA,NA,NA
+7,Inland Empire,Total,All levels,Benzodiazepine,NA,NA,NA,NA
+8,Los Angeles County,Total,All levels,Benzodiazepine,NA,NA,NA,NA
+9,Orange County,Total,All levels,Benzodiazepine,42.30718428506061,9.243523216236678,60.4244897888845,24.189878781236718
+10,San Diego - Impreial,Total,All levels,Benzodiazepine,NA,NA,NA,NA
+1,Superior California,Total,All levels,Cocaine,NA,NA,NA,NA
+2,North Coast,Total,All levels,Cocaine,NA,NA,NA,NA
+3,San Francisco Bay Area,Total,All levels,Cocaine,-31.802569344811314,22.022112829501207,11.360771801011051,-74.96591049063368
+4,Northern San Joaquin Valley,Total,All levels,Cocaine,NA,NA,NA,NA
+5,Central Coast,Total,All levels,Cocaine,NA,NA,NA,NA
+6,Southern San Joaquin Valley,Total,All levels,Cocaine,NA,NA,NA,NA
+7,Inland Empire,Total,All levels,Cocaine,NA,NA,NA,NA
+8,Los Angeles County,Total,All levels,Cocaine,43.33849751151206,16.830332814671625,76.32594982826845,10.351045194755677
+9,Orange County,Total,All levels,Cocaine,NA,NA,NA,NA
+10,San Diego - Impreial,Total,All levels,Cocaine,NA,NA,NA,NA
+1,Superior California,Total,All levels,Heroin,NA,NA,NA,NA
+2,North Coast,Total,All levels,Heroin,NA,NA,NA,NA
+3,San Francisco Bay Area,Total,All levels,Heroin,-84.83535769603944,18.784891416386795,-48.01697051992132,-121.65374487215755
+4,Northern San Joaquin Valley,Total,All levels,Heroin,NA,NA,NA,NA
+5,Central Coast,Total,All levels,Heroin,NA,NA,NA,NA
+6,Southern San Joaquin Valley,Total,All levels,Heroin,NA,NA,NA,NA
+7,Inland Empire,Total,All levels,Heroin,NA,NA,NA,NA
+8,Los Angeles County,Total,All levels,Heroin,22.033625226502604,16.638307373848082,54.644707679244846,-10.577457226239634
+9,Orange County,Total,All levels,Heroin,NA,NA,NA,NA
+10,San Diego - Impreial,Total,All levels,Heroin,NA,NA,NA,NA
+1,Superior California,Total,All levels,Natural opioid,NA,NA,NA,NA
+2,North Coast,Total,All levels,Natural opioid,NA,NA,NA,NA
+3,San Francisco Bay Area,Total,All levels,Natural opioid,-33.2366584561514,15.571354236975841,-2.7168041516787547,-63.75651276062405
+4,Northern San Joaquin Valley,Total,All levels,Natural opioid,NA,NA,NA,NA
+5,Central Coast,Total,All levels,Natural opioid,NA,NA,NA,NA
+6,Southern San Joaquin Valley,Total,All levels,Natural opioid,NA,NA,NA,NA
+7,Inland Empire,Total,All levels,Natural opioid,NA,NA,NA,NA
+8,Los Angeles County,Total,All levels,Natural opioid,-1.8974329806209285,12.923445111960262,23.43251943882119,-27.227385400063042
+9,Orange County,Total,All levels,Natural opioid,39.93688293107157,8.913964119140063,57.408252604586096,22.46551325755705
+10,San Diego - Impreial,Total,All levels,Natural opioid,10.78508600327047,9.040167886757654,28.50381506131547,-6.933643054774533
+1,Superior California,Total,All levels,Synthetic opioid,NA,NA,NA,NA
+2,North Coast,Total,All levels,Synthetic opioid,NA,NA,NA,NA
+3,San Francisco Bay Area,Total,All levels,Synthetic opioid,3.836936515596781,33.67565913477983,69.84122841976523,-62.16735538857167
+4,Northern San Joaquin Valley,Total,All levels,Synthetic opioid,NA,NA,NA,NA
+5,Central Coast,Total,All levels,Synthetic opioid,NA,NA,NA,NA
+6,Southern San Joaquin Valley,Total,All levels,Synthetic opioid,NA,NA,NA,NA
+7,Inland Empire,Total,All levels,Synthetic opioid,NA,NA,NA,NA
+8,Los Angeles County,Total,All levels,Synthetic opioid,263.29093195621726,28.65936414684002,319.46328568402373,207.11857822841083
+9,Orange County,Total,All levels,Synthetic opioid,NA,NA,NA,NA
+10,San Diego - Impreial,Total,All levels,Synthetic opioid,NA,NA,NA,NA

@@ -1,0 +1,59 @@
+region,region_name,county_name,county_fips
+3,San Francisco Bay Area,Alameda,06001
+4,Northern San Joaquin Valley,Alpine,06003
+4,Northern San Joaquin Valley,Amador,06005
+1,Superior California,Butte,06007
+4,Northern San Joaquin Valley,Calaveras,06009
+1,Superior California,Colusa,06011
+3,San Francisco Bay Area,Contra Costa,06013
+2,North Coast,Del Norte,06015
+1,Superior California,El Dorado,06017
+6,Southern San Joaquin Valley,Fresno,06019
+1,Superior California,Glenn,06021
+2,North Coast,Humboldt,06023
+10,San Diego - Impreial,Imperial,06025
+6,Southern San Joaquin Valley,Inyo,06027
+6,Southern San Joaquin Valley,Kern,06029
+6,Southern San Joaquin Valley,Kings,06031
+2,North Coast,Lake,06033
+1,Superior California,Lassen,06035
+8,Los Angeles County,Los Angeles,06037
+4,Northern San Joaquin Valley,Madera,06039
+3,San Francisco Bay Area,Marin,06041
+4,Northern San Joaquin Valley,Mariposa,06043
+2,North Coast,Mendocino,06045
+4,Northern San Joaquin Valley,Merced,06047
+1,Superior California,Modoc,06049
+4,Northern San Joaquin Valley,Mono,06051
+5,Central Coast,Monterey,06053
+2,North Coast,Napa,06055
+1,Superior California,Nevada,06057
+9,Orange County,Orange,06059
+1,Superior California,Placer,06061
+1,Superior California,Plumas,06063
+7,Inland Empire,Riverside,06065
+1,Superior California,Sacramento,06067
+5,Central Coast,San Benito,06069
+7,Inland Empire,San Bernardino,06071
+10,San Diego - Impreial,San Diego,06073
+3,San Francisco Bay Area,San Francisco,06075
+4,Northern San Joaquin Valley,San Joaquin,06077
+5,Central Coast,San Luis Obispo,06079
+3,San Francisco Bay Area,San Mateo,06081
+5,Central Coast,Santa Barbara,06083
+3,San Francisco Bay Area,Santa Clara,06085
+5,Central Coast,Santa Cruz,06087
+1,Superior California,Shasta,06089
+1,Superior California,Sierra,06091
+1,Superior California,Siskiyou,06093
+3,San Francisco Bay Area,Solano,06095
+2,North Coast,Sonoma,06097
+4,Northern San Joaquin Valley,Stanislaus,06099
+1,Superior California,Sutter,06101
+1,Superior California,Tehama,06103
+2,North Coast,Trinity,06105
+6,Southern San Joaquin Valley,Tulare,06107
+4,Northern San Joaquin Valley,Tuolumne,06109
+5,Central Coast,Ventura,06111
+1,Superior California,Yolo,06113
+1,Superior California,Yuba,06115
