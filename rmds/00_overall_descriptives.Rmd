@@ -1,0 +1,312 @@
+---
+title: "Overall descriptives"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, error=FALSE, warning=FALSE, message=FALSE}
+## Imports ----
+# library(lubridate)
+library(here)
+library(fs)
+library(tidyverse)
+library(knitr)
+source(here("code" , "utils.R"))
+
+## Constants ----
+SAVE_DIR <- config::get("private_save_folder")
+FIRST_WEEK <- config::get("first_week")
+LAST_WEEK <- config::get("last_week")
+
+## Data ----
+death_df <- readRDS(paste0(SAVE_DIR, "cleaned_line_data.RDS"))
+
+## Flag the death data ----
+death_df <- death_df %>%
+    flag_covid_death() %>%
+    mutate(non_covid = 1 - covid,
+           all_deaths = 1)
+
+flagged_df <- bind_rows(
+    ## Excess deaths are only those NOT from COVID
+    death_df %>%
+        filter(covid == 0) %>%
+        flag_any_poisoning_death() %>%
+        flag_drug_poisoning() %>%
+        flag_nondrug_poisoning() %>%
+        flag_alcohol() %>%
+        flag_benzos() %>%
+        flag_cocaine() %>%
+        flag_opioids() %>%
+        flag_meth(),
+    death_df %>%
+        filter(covid == 1)
+) %>% 
+    filter(dod <= LAST_WEEK)
+```
+## Total number of deaths before `r LAST_WEEK`
+```{r}
+NROW(flagged_df)
+```
+
+## Subset to CA residents
+```{r}
+## Subset to CA residents ----
+flagged_df <- flagged_df %>% 
+    filter(state_name == "CA") %>% 
+    select(-state_name)
+```
+
+```{r}
+NROW(flagged_df)
+```
+
+```{r}
+sum(death_df$state_name != "CA")
+```
+
+
+## Total number of deaths by sex
+```{r}
+flagged_df %>% 
+    group_by(sex) %>% 
+    summarize(n_deaths = n(),
+              median_age = median(age, na.rm = TRUE),
+              mean_age = mean(age, na.rm = TRUE),
+              sd_age = sd(age, na.rm = TRUE),
+              min_age = min(age, na.rm = TRUE),
+              max_age = max(age, na.rm = TRUE),
+              p25 = quantile(age, .25, na.rm = TRUE),
+              p75 = quantile(age, .75, na.rm = TRUE)) %>% 
+  kable()
+```
+
+## Total number of deaths over time
+
+NOTE 2020 only includes up to `r LAST_WEEK`.
+```{r}
+flagged_df %>% 
+    mutate(year = lubridate::year(dod)) %>% 
+    count(year) %>% 
+  kable()
+```
+
+## Total number of poisonings over time
+
+NOTE 2020 only includes up to `r LAST_WEEK`.
+```{r}
+flagged_df %>% 
+    filter(drug_poisoning == 1) %>% 
+    mutate(year = lubridate::year(dod)) %>% 
+    count(year) %>% 
+  kable()
+```
+
+## Total number of poisonings by sex
+```{r}
+flagged_df %>% 
+    filter(drug_poisoning == 1) %>% 
+    group_by(sex) %>% 
+    summarize(n_deaths = n(),
+              median_age = median(age, na.rm = TRUE),
+              mean_age = mean(age, na.rm = TRUE),
+              sd_age = sd(age, na.rm = TRUE),
+              min_age = min(age, na.rm = TRUE),
+              max_age = max(age, na.rm = TRUE),
+              p25 = quantile(age, .25, na.rm = TRUE),
+              p75 = quantile(age, .75, na.rm = TRUE)) %>% 
+  kable()
+```
+
+## Total number of poisonings by sex and year
+```{r}
+flagged_df %>% 
+    filter(drug_poisoning == 1) %>% 
+    mutate(year = lubridate::year(dod)) %>% 
+    group_by(sex, year) %>% 
+    summarize(n_deaths = n(),
+              median_age = median(age, na.rm = TRUE),
+              mean_age = mean(age, na.rm = TRUE),
+              sd_age = sd(age, na.rm = TRUE),
+              min_age = min(age, na.rm = TRUE),
+              max_age = max(age, na.rm = TRUE),
+              p25 = quantile(age, .25, na.rm = TRUE),
+              p75 = quantile(age, .75, na.rm = TRUE)) %>% 
+  kable()
+```
+
+## Total number of poisonings by age
+```{r}
+flagged_df %>% 
+    filter(drug_poisoning == 1) %>% 
+    mutate(age_grp = case_when(
+      between(age, -Inf, 17) ~ "Under 18",
+      between(age, 18, 39)  ~ "18 to 39",
+      between(age, 40, 64) ~ "40 to 64",
+      between(age, 65, Inf) ~ "65 and up",
+      TRUE ~ NA_character_
+    )) %>% 
+    group_by(age_grp) %>% 
+    summarize(n_deaths = n()) %>% 
+  kable()
+```
+
+## Total number of poisonings by age and year
+```{r}
+flagged_df %>% 
+    filter(drug_poisoning == 1) %>% 
+    mutate(age_grp = case_when(
+      between(age, -Inf, 17) ~ "Under 18",
+      between(age, 18, 24)  ~ "18 to 24",
+      between(age, 25, 39)  ~ "25 to 39",
+      between(age, 40, 64) ~ "40 to 64",
+      between(age, 65, Inf) ~ "65 and up",
+      TRUE ~ NA_character_
+    ),
+    year = lubridate::year(dod)) %>% 
+    group_by(age_grp, year) %>% 
+    summarize(n_deaths = n()) %>% 
+    group_by(year) %>% 
+  mutate(prop_year = n_deaths / sum(n_deaths)) %>% 
+  group_by(age_grp) %>% 
+  mutate(prop_age = n_deaths / sum(n_deaths)) %>% 
+ungroup() %>% 
+  kable()
+```
+
+## Closer look at education and poisonings by year
+```{r}
+flagged_df %>% 
+    filter(drug_poisoning == 1) %>% 
+    mutate(year = lubridate::year(dod)) %>% 
+    group_by(educ, year) %>% 
+    summarize(n_deaths = n(),
+              # median_age = median(age, na.rm = TRUE),
+              mean_age = mean(age, na.rm = TRUE),
+              sd_age = sd(age, na.rm = TRUE),
+              # min_age = min(age, na.rm = TRUE),
+              # max_age = max(age, na.rm = TRUE),
+              # p25 = quantile(age, .25, na.rm = TRUE),
+              # p75 = quantile(age, .75, na.rm = TRUE),
+              prop_white = mean(race == "White", na.rm = TRUE),
+              prop_hispanic = mean(race == "Hispanic", na.rm = TRUE),
+              prop_female = mean(sex == "female", na.rm = TRUE)) %>% 
+  arrange(year, educ)  %>% 
+  ungroup() %>% 
+  kable(digits = c(0, 0, 0, 1, 1, 3, 3, 3))
+```
+
+## Closer look at education and poisonings overall
+```{r}
+flagged_df %>% 
+    filter(drug_poisoning == 1) %>% 
+    mutate(year = lubridate::year(dod)) %>% 
+    group_by(educ) %>% 
+    summarize(n_deaths = n(),
+              # median_age = median(age, na.rm = TRUE),
+              mean_age = mean(age, na.rm = TRUE),
+              sd_age = sd(age, na.rm = TRUE),
+              # min_age = min(age, na.rm = TRUE),
+              # max_age = max(age, na.rm = TRUE),
+              # p25 = quantile(age, .25, na.rm = TRUE),
+              # p75 = quantile(age, .75, na.rm = TRUE),
+              prop_white = mean(race == "White", na.rm = TRUE),
+              prop_hispanic = mean(race == "Hispanic", na.rm = TRUE),
+              prop_female = mean(sex == "female", na.rm = TRUE)) %>% 
+  kable(digits = c(0, 0, 1, 1, 3, 3, 3))
+```
+
+
+## Missing race data in poisoning deaths
+```{r}
+RAW_FILE <- config::get("raw_data_file")
+
+  ## Ingest ----
+    raw_data <- readRDS(RAW_FILE)
+    
+    ## Recode race  ----
+    raw_data <- raw_data %>%
+        mutate(
+            race = case_when(
+                ## Being Hispanic trumps all other racial categorization rules
+                hispanic.origin == "Y" ~ "Hispanic",
+                ## Mixed, other, unknown.
+                race.1.code.final == 99 ~ "Unknown", 
+                race.1.code.final != race.2.code.final ~ "Other",
+                race.1.code.final != race.3.code.final ~ "Other",
+                race.2.code.final != race.3.code.final ~ "Other",
+                ## Then do single race
+                race.1.code.final == 10 ~ "White",
+                race.1.code.final == 20 ~ "Black",
+                race.1.code.final %in% c(30, 57, 58) ~ "American Indian / Native American",
+                race.1.code.final %in% c(41:49, 52:56, 59) ~ "Asian / Pacific Islander",
+                race.1.code.final %in% c(51) ~ "Other",
+                ## Some rows missing everything
+                is.na(race.1.code.final) &
+                    is.na(race.2.code.final) & is.na(race.3.code.final) ~ "Completely Missing",
+                ## Search on this to make sure it's correct
+                TRUE ~ "You missed a code if this label exists"
+            )
+        )
+            
+## Clean up a little
+    raw_data <- raw_data %>%
+        mutate(age_int = as.integer(age.in.years)) %>% 
+        select(
+            id, 
+            race,
+            age = age_int, 
+            dod = date.of.death,
+            state_name = residence.state.province,
+            county_name = county.of.residence.geocode.text,
+            county_fip = final.county.of.residence.geocode.nchs,
+            ucod = final.cause.of.death.icd10,
+            starts_with("record.axis.code")
+        ) %>% 
+        unite(record_all, starts_with("record.axis.code"), sep = " ") %>% 
+        mutate(
+            ucod = trimws(ucod), 
+            record_all = trimws(gsub(pattern = " NA", replacement = "", record_all))) %>% 
+        select(-starts_with("record.axis.code"))
+
+flagged_raw <- raw_data %>% 
+    flag_any_poisoning_death() %>%
+  flag_drug_poisoning() %>% 
+    filter(state_name == "CA",
+           dod <= LAST_WEEK) 
+  
+flagged_raw %>% 
+    filter(drug_poisoning == 1) %>% 
+    mutate(year = lubridate::year(dod)) %>% 
+    group_by(race, year) %>% 
+    summarize(n_deaths = n(),
+              median_age = median(age, na.rm = TRUE),
+              mean_age = mean(age, na.rm = TRUE),
+              sd_age = sd(age, na.rm = TRUE),
+              min_age = min(age, na.rm = TRUE),
+              max_age = max(age, na.rm = TRUE),
+              p25 = quantile(age, .25, na.rm = TRUE),
+              p75 = quantile(age, .75, na.rm = TRUE)) %>% 
+  kable()
+```
+
+## Missing data in all deaths
+```{r}
+flagged_raw %>% 
+    mutate(year = lubridate::year(dod)) %>% 
+    group_by(race, year) %>% 
+    summarize(n_deaths = n(),
+              median_age = median(age, na.rm = TRUE),
+              mean_age = mean(age, na.rm = TRUE),
+              sd_age = sd(age, na.rm = TRUE),
+              min_age = min(age, na.rm = TRUE),
+              max_age = max(age, na.rm = TRUE),
+              p25 = quantile(age, .25, na.rm = TRUE),
+              p75 = quantile(age, .75, na.rm = TRUE)) %>% 
+  kable()
+```

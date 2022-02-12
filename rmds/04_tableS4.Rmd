@@ -1,0 +1,31 @@
+---
+title: "Table S4"
+author: "Mathew Kiang"
+date: "2/9/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(here)
+library(knitr)
+library(kableExtra)
+
+x <- read_csv(here("output", "specific_drug_reporting.csv"))
+x %>%
+    kable(
+        format = "html",
+        col.names = c(
+            "Region", 
+            2016:2020
+        ),
+        booktabs = TRUE
+    ) %>%
+    kableExtra::kable_styling(bootstrap = c("striped", "scale_down"))
+```
+
+Here are the proportion of drug poisoning death certificates that have at least one drug specified. There is large variability in how death certificates are coded at the county-level. This measure provides a rough approximation of the quality of drug reporting on death certificates. 

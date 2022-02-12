@@ -1,0 +1,151 @@
+---
+title: "Tables S1. Excess deaths by substance and race/ethnicity"
+author: "Mathew Kiang"
+date: "10/25/2021"
+output: 
+  html_document:
+    code_folding: 'hide'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(here)
+library(kableExtra)
+library(knitr)
+source(here("code", "utils.R"))
+
+FORECAST_START <- as.Date(config::get("forecast_start"))
+LAST_WEEK <- as.Date(config::get("last_week"))
+
+formatC2 <- function(x, ...) {
+  formatC(round(x), format = "d", big.mark = ",")
+}
+```
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+## Data ----
+reshaped_pop <- readRDS(here("data", "pop_by_race_educ_extrapolated.RDS"))
+cume_excess_deaths <-
+    readRDS(here("data", "cume_excess_deaths.RDS")) %>%
+    mutate(year = lubridate::year(date)) %>%
+    left_join(reshaped_pop) %>%
+    filter(race != "all_nonhisp")
+expected_deaths <- readRDS(here("data", "expected_deaths.RDS"))
+
+super_table <- expected_deaths %>%
+    filter(
+        between(date, FORECAST_START, LAST_WEEK) |
+            between(
+                date,
+                FORECAST_START - lubridate::years(1),
+                LAST_WEEK - lubridate::years(1)
+            )
+    ) %>%
+    mutate(year = lubridate::year(date)) %>%
+    group_by(year, race, race_cat, educ, educ_cat, death_type, death_cat) %>%
+    summarize(
+        observed_deaths = sum(outcome),
+        expected_deaths = sum(expected),
+        mean_pop = mean(population)
+    ) %>%
+    arrange(race_cat, educ_cat, death_cat, year) %>%
+    pivot_wider(
+        id_cols = c(race, race_cat, educ, educ_cat, death_type, death_cat),
+        names_from = year,
+        values_from = observed_deaths:mean_pop
+    ) %>%
+    left_join(
+        cume_excess_deaths %>%
+            filter(date == max(date)) %>%
+            select(
+                race, 
+                race_cat,
+                educ, 
+                educ_cat,
+                death_type,
+                death_cat,
+                excess_mean = fitted,
+                excess_lower = lower,
+                excess_upper = upper
+            )
+    )
+
+super_table <- super_table %>%
+    ungroup() %>%
+    filter(
+        death_type != "all_deaths",
+        death_type != "non_covid",
+        death_type != "other_opioid",
+        death_type != "any_poisoning",
+        death_type != "nondrug_poisoning",
+        death_type != "unintent_nondrug_poisoning",
+        death_type != "intent_nondrug_poisoning",
+        !grepl("_alone", death_type, fixed = TRUE),
+        death_type != "no_specified_drug",
+        death_type != "other_drug"
+    ) %>%
+    filter(educ != "under25",
+           # educ != "all", 
+           race != "all_nonhisp")
+```
+
+## By race/ethnicity
+```{r}
+## Absolute numbers
+table_1 <- super_table %>%
+    filter(educ == "all") %>%
+    transmute(
+        row_num = 1:n(), 
+        race_cat,
+        death_cat,
+        obs_exp_2020_deaths = sprintf(
+            "%s (%s)",
+            formatC2(observed_deaths_2020),
+            formatC2(expected_deaths_2020)
+        ),
+        excess_2020_deaths = sprintf(
+            "%s (%s to %s)",
+            formatC2(excess_mean),
+            formatC2(excess_lower),
+            formatC2(excess_upper)
+        ),
+        excess_per_100k = sprintf(
+            "%0.2f (%0.2f to %0.2f)",
+            round(excess_mean / mean_pop_2020 * 100000, 2),
+            round(excess_lower / mean_pop_2020 * 100000, 2),
+            round(excess_upper / mean_pop_2020 * 100000, 2)
+        ),
+        obs_deaths_2019 = formatC2(observed_deaths_2019),
+        ratio_yoy = sprintf("%0.2f", round(
+            observed_deaths_2020 / observed_deaths_2019, 2
+        ))
+    ) 
+
+table_1 %>%
+    select(-race_cat,
+           -row_num) %>%
+    kable(
+        format = "html",
+        col.names = c(
+            # "Population",
+            "Death type",
+            "Observed (expected) deaths in January 5 to December 26, 2020",
+            "Excess deaths (95% CI) January 5 to December 26, 2020",
+            "Excess deaths (95% CI) per 100,000 population",
+            "Observed deaths in January 5 to December 26, 2019",
+            "Ratio of observed deaths in 2019 vs 2020"
+        ),
+        booktabs = TRUE
+    ) %>%
+    kableExtra::kable_styling(bootstrap = c("striped", "scale_down")) %>%
+    kableExtra::pack_rows("Total population", 1, 11) %>%
+    kableExtra::pack_rows("Non-Hispanic White", 12, 22) %>%
+    kableExtra::pack_rows("Non-Hispanic Black", 23, 27) %>%
+    kableExtra::pack_rows("Hispanic", 28, 36) %>% 
+    kableExtra::pack_rows("Non-Hispanc Asian", 37, 38) %>% 
+    kableExtra::pack_rows("Other Non-Hispanic", 39, 40) 
+```
