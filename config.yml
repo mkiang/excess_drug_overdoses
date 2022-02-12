@@ -1,0 +1,6 @@
+default:
+  raw_data_file: "E:/data/data.rds"
+  private_save_folder: "C:/Users/mathew_kiang/Desktop/data_private/excess_deaths_private/"
+  forecast_start: "2020-01-04"
+  first_week: "2016-01-03"
+  last_week: "2020-12-26" # "2021-01-02" 
