@@ -5,9 +5,20 @@
 
 <img src="./plots/fig01_cume_excess_deaths_per_100k_by_race.jpg" width="750px" style="display: block; margin: auto;" />
 
-This is reproducible code for our forthcoming paper, “Excess fatal drug
-overdoses in California during the COVID-19 pandemic by race/ethnicity,
-educational attainment, and region: A population-based study”.
+This is reproducible code for our paper, “[Excess fatal drug overdoses
+in California during the COVID-19 pandemic by race/ethnicity,
+educational attainment, and region: A population-based
+study](https://www.thelancet.com/journals/lanam/article/PIIS2667-193X(22)00054-0/fulltext)”
+in *The Lancet Regional Health - Americas*. The full citation is:
+
+> Kiang MV, Acosta RJ, Chen Y-H, Matthay EC, Tsai AC, Basu S, Glymour
+> MM, Bibbins-Domingo K, Humphreys K, Arthur KN, “Sociodemographic and
+> geographic disparities in excess fatal drug overdoses during the
+> COVID-19 pandemic in California: a population-based study.” *The
+> Lancet Regional Health - Americas*. 2022 Jul;11:100237. doi:
+> [10.1016/j.lana.2022.100237](https://www.thelancet.com/journals/lanam/article/PIIS2667-193X(22)00054-0/fulltext).
+> Epub 2022 Mar 19. PubMed PMID: 35342895; PubMed Central PMCID:
+> PMC8934030.
 
 ## Abstract
 

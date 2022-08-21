@@ -8,6 +8,10 @@
 /joinpoint/**/generated_plots/**
 /rmds/**_sortable.*
 /rmds/00_overall_descriptives.pdf
+**scratchpad.R
+/data/occ**
+/code/OCC_**
+/code/code_for_paa2022_presentation.R
 
 # Cluster / jupyter ignore
 .ipynb_checkpoints
